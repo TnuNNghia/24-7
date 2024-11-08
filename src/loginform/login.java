@@ -6,7 +6,14 @@
 package loginform;
 
 import assginmentjava3gd.view;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.security.MessageDigest; 
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -22,6 +29,28 @@ public class login extends javax.swing.JFrame {
         txtusername.setBackground(new java.awt.Color(0,0,0,1));
         txtpassword.setBackground(new java.awt.Color(0,0,0,1));
     }
+    private String md5Hash(String input) {
+        try {
+            // Tạo một instance của MessageDigest với thuật toán MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Mã hóa chuỗi đầu vào thành một mảng byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Chuyển đổi mảng byte thành chuỗi hexadecimal
+            StringBuilder sb = new StringBuilder();
+            for (byte b : messageDigest) {
+                sb.append(String.format("%02x", b));
+            }
+
+            // Trả về chuỗi mã hóa MD5
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            // Xử lý ngoại lệ nếu thuật toán MD5 không khả dụng
+            throw new RuntimeException(e);
+        }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -237,21 +266,64 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginActionPerformed
-        if (txtusername.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Vui long nhap ten dang nhap!!");
-            return;
-        }
-        if (txtpassword.getPassword().equals("")) {
-            JOptionPane.showMessageDialog(this, "Vui long nhap password dang nhap!!");
-            return;
-        }else{
-            view view = new view();
-            view.setVisible(true);
-            view.pack();
-            view.setLocationRelativeTo(null);
-            this.dispose();
-        }
-        
+        String username = txtusername.getText(); 
+        String password = new String(txtpassword.getPassword()); 
+
+        if (username.equals("")) { 
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập!"); 
+            return; 
+        } 
+
+        if (password.equals("")) { 
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu!"); 
+            return; 
+        } 
+
+        // Mã hóa mật khẩu sử dụng MD5
+        String hashedPassword = md5Hash(password); 
+
+        // Kết nối tới cơ sở dữ liệu MySQL
+        Connection conn = null; 
+        PreparedStatement stmt = null; 
+        ResultSet rs = null; 
+
+        try { 
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/assjava3", "root", "18102007"); 
+            // Câu lệnh SQL để kiểm tra tên đăng nhập và mật khẩu
+            String sql = "SELECT * FROM users WHERE full_name = ? AND password = ?"; 
+            stmt = conn.prepareStatement(sql); 
+            stmt.setString(1, username); 
+            stmt.setString(2, hashedPassword); // Sử dụng mật khẩu đã được mã hóa
+
+            // Thực hiện truy vấn
+            rs = stmt.executeQuery(); 
+
+            // Kiểm tra kết quả truy vấn
+            if (rs.next()) { 
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công"); 
+                // Đăng nhập thành công, mở IndexForm
+                view view = new view(); 
+                view.setVisible(true); 
+                view.pack(); 
+                view.setLocationRelativeTo(null); 
+                this.dispose(); // Đóng LoginForm
+            } else { 
+                // Nếu không có kết quả, thông báo tài khoản không hợp lệ
+                JOptionPane.showMessageDialog(null, "Username hoặc Password sai. Nếu chưa có tài khoản vui lòng tạo tài khoản!", "Error", JOptionPane.ERROR_MESSAGE); 
+            } 
+        } catch (SQLException e) { 
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+        } finally { 
+            // Đóng kết nối
+            try { 
+                if (rs != null) rs.close(); 
+                if (stmt != null) stmt.close(); 
+                if (conn != null) conn.close(); 
+            } catch (SQLException e) { 
+                e.printStackTrace(); 
+            } 
+        } 
+
         
     }//GEN-LAST:event_btnloginActionPerformed
 
@@ -266,7 +338,7 @@ public class login extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

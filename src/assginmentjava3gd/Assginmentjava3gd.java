@@ -14,7 +14,10 @@ public class Assginmentjava3gd {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        view view = new view();
+        view.setVisible(true);
+        view.pack();
+        view.setLocationRelativeTo(null);
     }
     
 }

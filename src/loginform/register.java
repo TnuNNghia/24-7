@@ -5,6 +5,14 @@
  */
 package loginform;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+
+
 /**
  *
  * @author ME1
@@ -20,6 +28,7 @@ public class register extends javax.swing.JFrame {
         txtemail.setBackground(new java.awt.Color(0,0,0,1));
         txtpassword.setBackground(new java.awt.Color(0,0,0,1));
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,7 +53,7 @@ public class register extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         disable = new javax.swing.JLabel();
         show = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnregiter = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         txtusername1 = new javax.swing.JTextField();
@@ -148,11 +157,16 @@ public class register extends javax.swing.JFrame {
         });
         jPanel2.add(show, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 40, 40));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(25, 118, 211));
-        jButton1.setText("REGISTER");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 306, 341, 40));
+        btnregiter.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnregiter.setForeground(new java.awt.Color(25, 118, 211));
+        btnregiter.setText("REGISTER");
+        btnregiter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnregiter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnregiterActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnregiter, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 306, 341, 40));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(199, 226, 255));
@@ -250,45 +264,84 @@ public class register extends javax.swing.JFrame {
         show.setEnabled(false);
     }//GEN-LAST:event_showMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void btnregiterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregiterActionPerformed
+        String fullName = txtusername1.getText().trim();
+        String email = txtemail.getText().trim();
+        String password = new String(txtpassword.getPassword()).trim();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new register().setVisible(true);
+        // Kiểm tra nếu email và mật khẩu không rỗng
+        if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra định dạng email
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            JOptionPane.showMessageDialog(null, "Email nhập chưa đúng cú pháp", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Mã hóa mật khẩu bằng MD5
+        String encryptedPassword = MD5UtiL.md5(password);
+
+        // Lưu thông tin vào cơ sở dữ liệu
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/assjava3", "root", "18102007");
+
+            // Kiểm tra nếu email đã tồn tại
+            String checkEmailSQL = "SELECT * FROM users WHERE email = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkEmailSQL);
+            checkStmt.setString(1, email);
+            ResultSet resultSet = checkStmt.executeQuery();
+
+            if (resultSet.next()) {
+                JOptionPane.showMessageDialog(null, "Email đã tồn tại, vui lòng sử dụng email khác!", "Error", JOptionPane.ERROR_MESSAGE);
+                resultSet.close();
+                checkStmt.close();
+                return;
             }
-        });
-    }
+            resultSet.close();
+            checkStmt.close();
+
+            // Câu lệnh SQL để chèn dữ liệu
+            String sql = "INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, fullName);
+            stmt.setString(2, email);
+            stmt.setString(3, encryptedPassword);
+
+            int rowsInserted = stmt.executeUpdate(); // Thực thi câu lệnh
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(null, "Đăng kí thành công!!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Chuyển sang form Login
+                login loginframe = new login();
+                loginframe.setVisible(true);
+                loginframe.pack();
+                loginframe.setLocationRelativeTo(null);
+                this.setVisible(false);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }//GEN-LAST:event_btnregiterActionPerformed
+
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnregiter;
     private javax.swing.JLabel disable;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

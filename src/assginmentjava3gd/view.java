@@ -7,6 +7,7 @@ package assginmentjava3gd;
 //import login.login;
 
 import java.awt.Color;
+import javax.swing.JOptionPane;
 import loginform.login;
 
 
@@ -425,6 +426,7 @@ public class view extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        JOptionPane.showConfirmDialog(this, "Ban co muon dang xuat khong !!");
         login login = new login();
         login.setVisible(true);
         login.setLocationRelativeTo(null);
@@ -538,7 +540,7 @@ public class view extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
