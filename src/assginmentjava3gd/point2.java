@@ -56,14 +56,20 @@ public class point2 extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Mã môn :");
 
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9004852_trash_delete_bin_remove_icon.png"))); // NOI18N
         jButton2.setText("Xóa");
 
+        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8726496_upload_icon.png"))); // NOI18N
         jButton3.setText("Cập nhật");
 
         jLabel9.setText("Mã lớp :");
 
         jLabel7.setText("Trạng Thái :");
 
+        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9080881_database_export_icon.png"))); // NOI18N
         jButton4.setText("Export");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -85,6 +91,8 @@ public class point2 extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Mã sinh viên :");
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/299068_add_sign_icon.png"))); // NOI18N
         jButton1.setText("Thêm");
 
         jLabel5.setText("Điểm lab :");
@@ -188,7 +196,7 @@ public class point2 extends javax.swing.JInternalFrame {
                         .addComponent(jLabel9)
                         .addGap(47, 47, 47)
                         .addComponent(jLabel7)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)

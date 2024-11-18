@@ -20,6 +20,8 @@ public class list2 extends javax.swing.JInternalFrame {
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
         BasicInternalFrameUI ui = (BasicInternalFrameUI)this.getUI();
         ui.setNorthPane(null);
+        // Đoạn mã này được sử dụng trong Java Swing để tùy chỉnh giao diện của một JInternalFrame (khung bên trong của ứng dụng desktop Swing). 
+        //Cụ thể, nó xóa bỏ phần tiêu đề và viền của JInternalFrame.
     }
 
     /**
