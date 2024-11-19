@@ -69,7 +69,7 @@ public class point2 extends javax.swing.JInternalFrame {
         jLabel7.setText("Trạng Thái :");
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9080881_database_export_icon.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/6296676_excel_microsoft_office_office365_icon.png"))); // NOI18N
         jButton4.setText("Export");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
