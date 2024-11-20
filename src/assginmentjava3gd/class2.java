@@ -6,7 +6,7 @@ package assginmentjava3gd;
 
 import Model.Class2;
 import java.awt.BorderLayout;
-import java.awt.List;
+import java.util.List; // phai sai util
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,138 +19,172 @@ import javax.swing.JTable;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
+import assginmentjava3gd.student2;
+import DAO.ClassDAO2;
 
 /**
  *
  * @author ACER
  */
 public class class2 extends javax.swing.JInternalFrame {
-    private final ArrayList<Class2> lop = new ArrayList<>();
-    private DefaultTableModel tableModel;
+    private final List<Class2> lop = new ArrayList<>();
+    private DefaultTableModel table;
+    private final student2 st;
 
     public class2() {
         initComponents();
-        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        BasicInternalFrameUI ui = (BasicInternalFrameUI) this.getUI();
+        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
+        BasicInternalFrameUI ui = (BasicInternalFrameUI)this.getUI();
         ui.setNorthPane(null);
-
-        // Cấu hình model cho bảng
-        tableModel = (DefaultTableModel) Tablelop.getModel();
-        tableModel.setColumnIdentifiers(new String[]{"Mã Lớp", "Tên Lớp", "Mô Tả"});
-
-        // Tự động load dữ liệu khi form được mở
-        loadData();
+        st = new student2();
+        fillTable();
     }
-
-    // Hàm này sẽ load dữ liệu vào bảng khi form được mở lại
-    public void loadData() {
-    // Clear danh sách lop cũ
-    lop.clear();
     
-    // Xóa dữ liệu cũ trong bảng
-    tableModel.setRowCount(0);
+//    public void fillTable() {
+//        DefaultTableModel model = (DefaultTableModel) btnTablelop.getModel();
+//        model.setRowCount(0);      
+//          st.getCboLop().removeAllItems();
+//        for (Class2 dp : lop) {
+//            Object[] row = new Object[]{dp.malop, dp.tenlop, dp.mota};
+//            model.addRow(row);         
+//            st.getCboLop().addItem(dp.tenlop);
+//        }
+//    }
     
-    // Kết nối với cơ sở dữ liệu
-    String url = "jdbc:mysql://localhost:3306/assjava3"; // Địa chỉ cơ sở dữ liệu của bạn
-    String username = "root"; // Tên người dùng
-    String password = "18102007"; // Mật khẩu
-
-    // Truy vấn SQL
-    String query = "SELECT malop, tenlop, mota FROM lophoc"; // Điều chỉnh tên bảng và cột cho phù hợp với cấu trúc của bạn
-
-    try (Connection conn = DriverManager.getConnection(url, username, password);
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
-
-        // Thêm dữ liệu vào bảng
-        while (rs.next()) {
-            // Lấy dữ liệu từ kết quả truy vấn và thêm vào bảng
-            String malop = rs.getString("malop");
-            String tenlop = rs.getString("tenlop");
-            String mota = rs.getString("mota");
-
-            // Thêm vào danh sách lop (nếu cần)
-            lop.add(new Class2(malop, tenlop, mota));
-
-            // Thêm dữ liệu vào model của bảng
-            tableModel.addRow(new Object[]{malop, tenlop, mota});
-        }
-        
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi load dữ liệu: " + e.getMessage());
-    }
-}
-
-
-    // Hàm fillTable để cập nhật lại bảng nếu có thay đổi
-    public void fillTable() {
-    DefaultTableModel model = (DefaultTableModel) Tablelop.getModel();
-    model.setRowCount(0); // Xóa tất cả các dòng trong bảng
-
-    // Thêm dữ liệu mới vào bảng
-    for (Class2 dp : lop) {
-        Object[] row = new Object[]{dp.malop, dp.tenlop, dp.mota};
-        model.addRow(row); // Thêm dòng vào bảng
-    }
-}
-
-    // Thêm lớp mới
-    public void addClass(String malop, String tenlop, String mota) {
-         if (txtMa.getText().equals("") && txtTen.getText().equals("")) {
+     public void addClass() {
+    if (txtMa.getText().equals("") && txtTen.getText().equals("")) {
         JOptionPane.showMessageDialog(this, "Chưa nhập tên và mã lớp", "Error", JOptionPane.WARNING_MESSAGE);
                 JOptionPane.showMessageDialog(this, "Thêm thất bại", "Error", JOptionPane.WARNING_MESSAGE);
 
          return;
+    } 
+    if (txtTen.getText().equals("")) {
+    JOptionPane.showMessageDialog(this, "Chưa nhập tên", "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Thêm thất bại", "Error", JOptionPane.WARNING_MESSAGE);
+
+    return;
+    } 
+    if (txtMa.getText().equals("")) {
+    JOptionPane.showMessageDialog(this, "Chưa nhập mã lớp", "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Thêm thất bại", "Error", JOptionPane.WARNING_MESSAGE);
+
+    return;
+    }
+        Class2 dp = new Class2();
+            dp.malop =  txtMa.getText();
+            dp.tenlop = txtTen.getText();
+            dp.mota = txtMota.getText();
+            lop.add(dp);
+            st.getCboLop().addItem(dp.tenlop);
+            st.getCboLop().revalidate();
+            st.getCboLop().repaint();
+            ClassDAO2.insertDe(dp);
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+     }
+     
+    public void updateClass() {
+        int index = btnTablelop.getSelectedRow();
+        if (index == -1 || index >= lop.size()) {
+            JOptionPane.showMessageDialog(this, "Chưa chọn hàng nào để cập nhật!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }    
+        if (txtMa.getText().equals("") && txtTen.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Chưa nhập tên và mã lớp", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
         } 
+
         if (txtTen.getText().equals("")) {
-        JOptionPane.showMessageDialog(this, "Chưa nhập tên", "Error", JOptionPane.WARNING_MESSAGE);
-                    JOptionPane.showMessageDialog(this, "Thêm thất bại", "Error", JOptionPane.WARNING_MESSAGE);
-
-        return;
+            JOptionPane.showMessageDialog(this, "Chưa nhập tên", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
         } 
-        if (txtMa.getText().equals("")) {
-        JOptionPane.showMessageDialog(this, "Chưa nhập mã lớp", "Error", JOptionPane.WARNING_MESSAGE);
-                    JOptionPane.showMessageDialog(this, "Thêm thất bại", "Error", JOptionPane.WARNING_MESSAGE);
 
-        return;
+        if (txtMa.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Chưa nhập mã lớp", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Class2 dp = lop.get(index);
+        dp.malop = txtMa.getText();
+        dp.tenlop = txtTen.getText();
+        dp.mota = txtMota.getText();
+        st.getCboLop().removeItemAt(index);
+        st.getCboLop().insertItemAt(dp.tenlop, index);
+        st.getCboLop().revalidate();
+        st.getCboLop().repaint();
+        ClassDAO2.updateDe(dp);
+        fillTable();
+        JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+}
+    public void removeclass() {
+        int index = btnTablelop.getSelectedRow(); // Lấy dòng được chọn từ bảng
+
+        if (index != -1 && index < lop.size()) { // Kiểm tra dòng hợp lệ
+            int choice = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa lớp học này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                // Lấy lớp học cần xóa từ danh sách
+                Class2 dp = lop.get(index);
+
+                // Xóa lớp học khỏi cơ sở dữ liệu
+                ClassDAO2.deleteDe(dp.getMalop());
+
+                // Xóa lớp học khỏi danh sách `lop` và combobox
+                lop.remove(index);
+                st.getCboLop().removeItemAt(index);
+
+                // Cập nhật lại bảng và giao diện
+                fillTable();
+
+                JOptionPane.showMessageDialog(this, "Xóa thành công!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa chọn hàng nào để xóa hoặc dữ liệu không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
+}
+    
+    
+    // đây là code để đẩy cái dữ liệu ở database lên table 
+    public void fillTable() {
+    // Lấy dữ liệu từ cơ sở dữ liệu
+        List<Class2> classes = ClassDAO2.getAllClasses();
+        lop.clear(); // Xóa danh sách cũ
+        lop.addAll(classes); // Cập nhật danh sách mới
+
+        // Cập nhật JTable
+        DefaultTableModel model = (DefaultTableModel) btnTablelop.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+
+        for (Class2 dp : lop) {
+            Object[] row = new Object[]{dp.malop, dp.tenlop, dp.mota};
+            model.addRow(row); // Thêm dữ liệu vào bảng
         }
 
-        // Thêm lớp mới vào danh sách
-        Class2 dp = new Class2(malop, tenlop, mota);
-        lop.add(dp); // Thêm vào danh sách lớp
-
-        fillTable(); // Cập nhật lại bảng
-        JOptionPane.showMessageDialog(this, "Thêm thành công!");
-    }
-
-    // Cập nhật lớp
-    public void updateClass(int selectedIndex, String malop, String tenlop, String mota) {
-    // Kiểm tra xem có chọn hàng nào không
-    if (selectedIndex < 0 || selectedIndex >= lop.size()) {
-        JOptionPane.showMessageDialog(this, "Chưa chọn hàng nào để cập nhật!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // Kiểm tra thông tin nhập vào
-    if (malop.isEmpty() || tenlop.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chưa nhập đủ thông tin lớp!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    // Cập nhật thông tin lớp trong danh sách
-    Class2 dp = lop.get(selectedIndex);
-    dp.malop = malop;
-    dp.tenlop = tenlop;
-    dp.mota = mota;
-
-    // Cập nhật lại bảng
-    fillTable(); // Cập nhật lại bảng sau khi thay đổi dữ liệu
-    JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+        // Cập nhật combobox (nếu cần)
+        st.getCboLop().removeAllItems();
+        for (Class2 dp : lop) {
+            st.getCboLop().addItem(dp.tenlop);
+        }
 }
-
-
     
+    
+    
+    // cái này là để click vào table để nó hiện lên mấy cái textfield á nha 
+    public void clickHere(){
+        int row = btnTablelop.getSelectedRow();  // Lấy chỉ số dòng được chọn
+    
+    // Kiểm tra xem có dòng nào được chọn không
+        if (row != -1) {
+        // Lấy dữ liệu từ bảng và điền vào các trường nhập liệu
+        String maLop = btnTablelop.getValueAt(row, 0).toString();  // Lấy mã lớp từ cột 1
+        String tenLop = btnTablelop.getValueAt(row, 1).toString();  // Lấy tên lớp từ cột 2
+        String moTa = btnTablelop.getValueAt(row, 2).toString();    // Lấy mô tả từ cột 3
+        
+        // Cập nhật các trường nhập liệu
+        txtMa.setText(maLop);
+        txtTen.setText(tenLop);
+        txtMota.setText(moTa);
+    }
+    }
+
    
 
     /**
@@ -163,10 +197,10 @@ public class class2 extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        Tablelop = new javax.swing.JTable();
+        btnTablelop = new javax.swing.JTable();
         btnthem = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnxoa = new javax.swing.JButton();
+        btncapnhat = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         txtTen = new javax.swing.JTextField();
         txtMa = new javax.swing.JTextField();
@@ -176,7 +210,7 @@ public class class2 extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtMota = new javax.swing.JTextArea();
 
-        Tablelop.setModel(new javax.swing.table.DefaultTableModel(
+        btnTablelop.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -187,7 +221,12 @@ public class class2 extends javax.swing.JInternalFrame {
                 "Mã lớp", "Tên lớp", "Mô tả"
             }
         ));
-        jScrollPane1.setViewportView(Tablelop);
+        btnTablelop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTablelopMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(btnTablelop);
 
         btnthem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnthem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/299068_add_sign_icon.png"))); // NOI18N
@@ -198,16 +237,21 @@ public class class2 extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9004852_trash_delete_bin_remove_icon.png"))); // NOI18N
-        jButton2.setText("Xóa");
-
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8726496_upload_icon.png"))); // NOI18N
-        jButton3.setText("Cập nhật");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnxoa.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnxoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9004852_trash_delete_bin_remove_icon.png"))); // NOI18N
+        btnxoa.setText("Xóa");
+        btnxoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnxoaActionPerformed(evt);
+            }
+        });
+
+        btncapnhat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btncapnhat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8726496_upload_icon.png"))); // NOI18N
+        btncapnhat.setText("Cập nhật");
+        btncapnhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncapnhatActionPerformed(evt);
             }
         });
 
@@ -238,7 +282,7 @@ public class class2 extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                            .addComponent(btncapnhat, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                             .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -254,7 +298,7 @@ public class class2 extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnxoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnthem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(65, 65, 65))
         );
@@ -281,11 +325,11 @@ public class class2 extends javax.swing.JInternalFrame {
                         .addGap(44, 44, 44)
                         .addComponent(btnthem)
                         .addGap(27, 27, 27)
-                        .addComponent(jButton2)))
+                        .addComponent(btnxoa)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(jButton3)
+                        .addComponent(btncapnhat)
                         .addGap(32, 32, 32)
                         .addComponent(jButton4)
                         .addGap(156, 156, 156))
@@ -299,19 +343,27 @@ public class class2 extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
-        addClass(title, title, title);
+        addClass();
     }//GEN-LAST:event_btnthemActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        updateClass(PROPERTIES, title, title, title);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btncapnhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncapnhatActionPerformed
+        updateClass();
+    }//GEN-LAST:event_btncapnhatActionPerformed
+
+    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
+        removeclass();
+    }//GEN-LAST:event_btnxoaActionPerformed
+
+    private void btnTablelopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTablelopMouseClicked
+          clickHere();
+    }//GEN-LAST:event_btnTablelopMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Tablelop;
+    private javax.swing.JTable btnTablelop;
+    private javax.swing.JButton btncapnhat;
     private javax.swing.JButton btnthem;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnxoa;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

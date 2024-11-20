@@ -19,6 +19,8 @@ import loginform.login;
  */
 public class view extends javax.swing.JFrame {
     Color DefaultColor,ClickColor;
+    private boolean isFormOpen = false;
+
     /**
      * Creates new form view
      */
@@ -637,36 +639,39 @@ public class view extends javax.swing.JFrame {
     }//GEN-LAST:event_menu4MouseClicked
 
     private void menu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu2MouseClicked
-        // Khi mở lại tab chứa class2
-        class2 cl = new class2();
-        jdesktoppanel.removeAll(); // Xóa các panel cũ
-        jdesktoppanel.add(cl);     // Thêm tab mới
-        jdesktoppanel.revalidate();
-        jdesktoppanel.repaint();
+        class2 cl = new class2(); // cái này là jframe 
+        jdesktoppanel.removeAll(); 
+        jdesktoppanel.add(cl);  // Thêm đối tượng po
+        jdesktoppanel.revalidate();  // Cập nhật lại giao diện
+        jdesktoppanel.repaint();  // Vẽ lại giao diện
         cl.setVisible(true);
-
-        // Gọi loadData() để tải lại dữ liệu
-        cl.loadData();
-
-
     }//GEN-LAST:event_menu2MouseClicked
 
     private void menu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu3MouseClicked
-        subject2 sb = new subject2();
-        jdesktoppanel.removeAll();  // Xóa các thành phần trước đó
-        jdesktoppanel.add(sb);  // Thêm đối tượng sb
+        subject2 sb = new subject2(); // cái này là jframe 
+        jdesktoppanel.removeAll(); 
+        jdesktoppanel.add(sb);  // Thêm đối tượng po
         jdesktoppanel.revalidate();  // Cập nhật lại giao diện
         jdesktoppanel.repaint();  // Vẽ lại giao diện
         sb.setVisible(true);
     }//GEN-LAST:event_menu3MouseClicked
 
     private void menu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu5MouseClicked
-         point2 po = new point2(); // cái này là jframe 
-        jdesktoppanel.removeAll();  // Xóa các thành phần trước đó
+        point2 po = new point2(); // cái này là jframe 
+        jdesktoppanel.removeAll(); 
         jdesktoppanel.add(po);  // Thêm đối tượng po
         jdesktoppanel.revalidate();  // Cập nhật lại giao diện
         jdesktoppanel.repaint();  // Vẽ lại giao diện
         po.setVisible(true);
+
+// Kiểm tra nếu form sb chưa mở
+//        if (sb == null || !sb.isVisible()) {
+//        sb = new subject2(); // Tạo mới đối tượng subject2
+//        jdesktoppanel.add(sb); // Thêm đối tượng sb vào DesktopPanel
+//        jdesktoppanel.revalidate(); // Cập nhật lại giao diện
+//        jdesktoppanel.repaint(); // Vẽ lại giao diện
+//        sb.setVisible(true); // Hiển thị form
+//        isFormOpen = true;
     }//GEN-LAST:event_menu5MouseClicked
 
     private void menu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu6MouseClicked

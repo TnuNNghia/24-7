@@ -4,14 +4,8 @@
  */
 package Model;
 
-import com.mysql.cj.xdevapi.Statement;
-import com.sun.jdi.connect.spi.Connection;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
+
 
 
 /**
@@ -19,21 +13,40 @@ import java.sql.ResultSet;
  * @author ACER
  */
 public class Class2 extends JPanel  {
-    
-    public  String malop;
+    public String malop;
     public String tenlop;
     public String mota;
 
     public Class2() {
     }
-    
+
     public Class2(String malop, String tenlop, String mota) {
         this.malop = malop;
         this.tenlop = tenlop;
         this.mota = mota;
     }
     
+    public String getMalop() {
+        return malop;
+    }
 
-    
+    public void setMalop(String malop) {
+        this.malop = malop;
+    }
 
+    public String getTenlop() {
+        return tenlop;
+    }
+
+    public void setTenlop(String tenlop) {
+        this.tenlop = tenlop;
+    }
+
+    public String getMota() {
+        return mota;
+    }
+
+    public void setMota(String mota) {
+        this.mota = mota;
+    }
 }
