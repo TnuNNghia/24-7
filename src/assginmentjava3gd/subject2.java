@@ -247,7 +247,7 @@ public void removeSubject() {
 
         btnxoa = new javax.swing.JButton();
         btncapnhat = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnreset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtmota = new javax.swing.JTextArea();
@@ -279,8 +279,14 @@ public void removeSubject() {
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton4.setText("jButton4");
+        btnreset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnreset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9856287_reset_reload_sync_update_icon.png"))); // NOI18N
+        btnreset.setText("Reset");
+        btnreset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnresetActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Mã môn :");
@@ -358,7 +364,7 @@ public void removeSubject() {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btncapnhat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnreset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnxoa, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
                         .addGap(0, 30, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -397,7 +403,7 @@ public void removeSubject() {
                         .addGap(25, 25, 25)
                         .addComponent(btncapnhat)
                         .addGap(41, 41, 41)
-                        .addComponent(jButton4))
+                        .addComponent(btnreset))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -423,13 +429,21 @@ public void removeSubject() {
         clickHere();
     }//GEN-LAST:event_btnTableMonhocMouseClicked
 
+    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
+       txtma.setText("");
+       txtten.setText("");
+       txtmota.setText("");
+       txtquamon.setText("");
+        
+    }//GEN-LAST:event_btnresetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable btnTableMonhoc;
     private javax.swing.JButton btncapnhat;
+    private javax.swing.JButton btnreset;
     private javax.swing.JButton btnthem;
     private javax.swing.JButton btnxoa;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

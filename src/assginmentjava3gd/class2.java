@@ -79,6 +79,7 @@ public class class2 extends javax.swing.JInternalFrame {
             st.getCboLop().revalidate();
             st.getCboLop().repaint();
             ClassDAO2.insertDe(dp);
+            fillTable();
             JOptionPane.showMessageDialog(this, "Thêm thành công");
      }
      
@@ -201,7 +202,7 @@ public class class2 extends javax.swing.JInternalFrame {
         btnthem = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btncapnhat = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnreset = new javax.swing.JButton();
         txtTen = new javax.swing.JTextField();
         txtMa = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -255,8 +256,14 @@ public class class2 extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton4.setText("jButton4");
+        btnreset.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnreset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/9856287_reset_reload_sync_update_icon.png"))); // NOI18N
+        btnreset.setText("Reset");
+        btnreset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnresetActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Mã lớp :");
@@ -283,7 +290,7 @@ public class class2 extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btncapnhat, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnreset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -305,7 +312,7 @@ public class class2 extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -331,7 +338,7 @@ public class class2 extends javax.swing.JInternalFrame {
                         .addGap(24, 24, 24)
                         .addComponent(btncapnhat)
                         .addGap(32, 32, 32)
-                        .addComponent(jButton4)
+                        .addComponent(btnreset)
                         .addGap(156, 156, 156))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -358,13 +365,19 @@ public class class2 extends javax.swing.JInternalFrame {
           clickHere();
     }//GEN-LAST:event_btnTablelopMouseClicked
 
+    private void btnresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnresetActionPerformed
+        txtTen.setText("");
+        txtMa.setText("");
+        txtMota.setText("");
+    }//GEN-LAST:event_btnresetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable btnTablelop;
     private javax.swing.JButton btncapnhat;
+    private javax.swing.JButton btnreset;
     private javax.swing.JButton btnthem;
     private javax.swing.JButton btnxoa;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
